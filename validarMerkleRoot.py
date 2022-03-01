@@ -4,14 +4,14 @@ import requests
 
 def get_hash_last_block():
     url = 'https://blockchain.info/latestblock'
-    headers = {'user-agent': 'my-app/0.0.1'}
+    headers = {'user-agent': 'blockchain/0.0.1'}
     response = requests.get(url, headers=headers)#la respuesta _content esta en Bytes
     block=json.loads(response._content.decode('utf-8'))
     return block["hash"]
 
 def get_block_info(hash_block):
     url = 'https://blockchain.info/rawblock/'+hash_block
-    headers = {'user-agent': 'my-app/0.0.1'}
+    headers = {'user-agent': 'blockchain/0.0.1'}
     response = requests.get(url, headers=headers)#la respuesta _content esta en Bytes
     block=json.loads(response._content.decode('utf-8'))
     return block
@@ -53,6 +53,5 @@ if __name__ == '__main__':
     hash_block = get_hash_last_block()
     block = get_block_info(hash_block)
     txHash=[x["hash"] for x in block["tx"]]#hash de las transacciones en array
-    #print(block["mrkl_root"])
     merkle=get_merkle_tree(txHash)
     print(f'merkled valido: {merkle==block["mrkl_root"]}')
